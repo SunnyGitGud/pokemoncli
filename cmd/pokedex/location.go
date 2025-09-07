@@ -64,7 +64,7 @@ func fetchLocation(url string) (*LocationAreaRespose, error){
 }
 
 
-func commandMap(cfg *Config, parsedText []string) error {
+func commandMap(cfg *Config, parsedText []string, s string) error {
 	data, err := fetchLocation(cfg.Next)
 	if err != nil {
 		return fmt.Errorf("error fetchLocation")
@@ -76,7 +76,7 @@ func commandMap(cfg *Config, parsedText []string) error {
 	cfg.Previous = data.Previous
 	return nil
 }
-func commandMapBack(cfg *Config, parsedText []string) error {
+func commandMapBack(cfg *Config, parsedText []string, s string) error {
 	if cfg.Previous == "" {
 		fmt.Println("you're on the first page")
 		return nil 

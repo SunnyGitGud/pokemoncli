@@ -45,13 +45,12 @@ func FetchLocationDetail(url string)  (*LocationAreaDetail, error) {
 
 
 
-func commandExplore(cfg *Config, locationName []string) error {
-	if len(locationName) < 2 {
+func commandExplore(cfg *Config, s []string, locationName string) error {
+	if locationName == "" {
 		return fmt.Errorf("Use Explore <location-name-or-id>")
 	} 
-	location := locationName[1]
 
-	url := "https://pokeapi.co/api/v2/location-area/" + location + "/" 
+	url := "https://pokeapi.co/api/v2/location-area/" + locationName + "/" 
 	data, err := FetchLocationDetail(url)
 	if err != nil {
 		return fmt.Errorf("cant fetch locations") 
