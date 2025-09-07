@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -72,9 +71,7 @@ func commandExplore(cfg *Config, parsedText []string) error {
 		return fmt.Errorf("explore fetch error: %v", err)
 	}	
 	
-	b, _ := json.MarshalIndent(data.Results, "", "  ")
-	fmt.Println(string(b))
-	fmt.Printf("Exploring %s", locationName)
+	fmt.Printf("Exploring %s:\n", locationName)
 	for _, loc := range data.Results {
 	fmt.Println("-", loc.Name)
 	}
