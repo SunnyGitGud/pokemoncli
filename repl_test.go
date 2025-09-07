@@ -1,45 +1,62 @@
 package main
 
 import (
+	"fmt"
+	"github.com/sunnygitgud/pokemoncli/internal/pokecache"
 	"testing"
+	"time"
 )
-func TestCleanInput(t *testing.T) {
+
+func TestAddGet(t *testing.T) {
+	const interval = 5 * time.Second
 	cases := []struct {
-		input    string
-		expected []string
+		key string
+		val []byte
 	}{
 		{
-			input:    "  hello  world  ",
-			expected: []string{"hello", "world"},
+			key: "https://example.com",
+			val: []byte("testdata"),
 		},
 		{
-			input:    "Charmander Bulbasaur PIKACHU",
-			expected: []string{"charmander", "bulbasaur", "pikachu"},
-		},
-		{
-			input:    "   spaced    out   words   ",
-			expected: []string{"spaced", "out", "words"},
-		},
-		{
-			input:    "",
-			expected: []string{},
+			key: "https://example.com/path",
+			val: []byte("moretestdata"),
 		},
 	}
 
-	for _, c := range cases {
-		actual := cleanInput(c.input)
-
-		if len(actual) != len(c.expected) {
-			t.Errorf("For input %q, expected length %d, got %d", c.input, len(c.expected), len(actual))
-			continue
-		}
-
-		for i := range actual {
-			if actual[i] != c.expected[i] {
-				t.Errorf("For input %q, expected %q at index %d, got %q",
-					c.input, c.expected[i], i, actual[i])
+	for i, c := range cases {
+		t.Run(fmt.Sprintf("Test case %v", i), func(t *testing.T) {
+			cache := pokecache.NewCache(interval)
+			cache.Add(c.key, c.val)
+			val, ok := cache.Get(c.key)
+			if !ok {
+				t.Errorf("expected to find key")
+				return
 			}
-		}
+			if string(val) != string(c.val) {
+				t.Errorf("expected to find value")
+				return
+			}
+		})
 	}
 }
 
+func TestReapLoop(t *testing.T) {
+	const baseTime = 5 * time.Millisecond
+	const waitTime = baseTime + 5*time.Millisecond
+	cache := pokecache.NewCache(baseTime)
+	cache.Add("https://example.com", []byte("testdata"))
+
+	_, ok := cache.Get("https://example.com")
+	if !ok {
+		t.Errorf("expected to find key")
+		return
+	}
+
+	time.Sleep(waitTime)
+
+	_, ok = cache.Get("https://example.com")
+	if ok {
+		t.Errorf("expected to not find key")
+		return
+	}
+}

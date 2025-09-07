@@ -34,7 +34,7 @@ func commandMap(cfg *Config) error {
 		return fmt.Errorf("error fetchLocation")
 	}
 	for _, loc := range data.Results {
-		fmt.Print(loc.Name)
+		fmt.Println(loc.Name)
 	}
 	cfg.Next = data.Next
 	cfg.Previous = data.Previous
