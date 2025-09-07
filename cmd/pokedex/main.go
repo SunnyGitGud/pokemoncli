@@ -10,18 +10,18 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*Config, []string, string) error
+	callback    func(*Config, []string) error
 }
 
 var command map[string]cliCommand // declare first
 
-func commandExit(cfg *Config, parsedText []string, s string) error {
+func commandExit(cfg *Config, parsedText []string) error {
 	fmt.Println("Closing your pokedex... Goodbye")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(cfg *Config, parsedText []string, s string) error {
+func commandHelp(cfg *Config, parsedText []string) error {
 	for name, cmd := range command {
 		fmt.Printf("%s: %s\n", name, cmd.description)
 	}
@@ -81,8 +81,7 @@ func main() {
 			fmt.Println("unknown command: ", inputCmd)
 			continue
 		}
-		args := parsedText[1]
-		err := cmd.callback(cfg, parsedText, args) 
+		err := cmd.callback(cfg, parsedText) 
 		if err != nil {
 			fmt.Println("Error:", err)
 		}

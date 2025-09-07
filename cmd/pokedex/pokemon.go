@@ -45,20 +45,23 @@ func FetchLocationDetail(url string)  (*LocationAreaDetail, error) {
 
 
 
-func commandExplore(cfg *Config, s []string, locationName string) error {
-	if locationName == "" {
-		return fmt.Errorf("Use Explore <location-name-or-id>")
-	} 
-
-	url := "https://pokeapi.co/api/v2/location-area/" + locationName + "/" 
-	data, err := FetchLocationDetail(url)
-	if err != nil {
-		return fmt.Errorf("cant fetch locations") 
+func commandExplore(cfg *Config, parsedText []string) error {
+	if len(parsedText) < 2 {
+			return fmt.Errorf("Use Explore <location-name-or-id>")
 	}
 
-	fmt.Printf("Exploring %s: \n", locationName)
+	// take the *second string* after "explore"
+	location := parsedText[1]
+
+	url := "https://pokeapi.co/api/v2/location-area/" + location + "/"
+	data, err := FetchLocationDetail(url)
+	if err != nil {
+			return fmt.Errorf("can't fetch location: %v", err)
+	}
+
+	fmt.Printf("Exploring %s:\n", location)
 	for _, encounter := range data.PokemonList {
-		fmt.Println("-", encounter.Pokemon.Name)
+			fmt.Println("-", encounter.Pokemon.Name)
 	}
 
 	return nil
