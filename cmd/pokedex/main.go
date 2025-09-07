@@ -28,65 +28,12 @@ func commandHelp(cfg *Config, parsedText []string) error {
 	return nil
 }
 
-func commandMap(cfg *Config, parsedText []string) error {
-	data, err := fetchLocation(cfg.Next)
-	if err != nil {
-		return fmt.Errorf("error fetchLocation")
-	}
-	for _, loc := range data.Results {
-		fmt.Println(loc.Name)
-	}
-	cfg.Next = data.Next
-	cfg.Previous = data.Previous
-	return nil
-}
-func commandMapBack(cfg *Config, parsedText []string) error {
-	if cfg.Previous == "" {
-		fmt.Println("you're on the first page")
-		return nil 
-	}
-	data, err := fetchLocation(cfg.Previous)
-	if err != nil {
-		fmt.Println("error fetchLocation")
-		return nil
-	}
-	for _, loc := range data.Results {
-		fmt.Println(loc.Name)
-	}
-	cfg.Next = data.Next
-	cfg.Previous = data.Previous
-	return  nil
-}
-
-func commandExplore(cfg *Config, parsedText []string) error {
-	if len(parsedText) < 2 {
-		return fmt.Errorf("use Explore + location name")
-	}
-
-	locationName := parsedText[1]
-	url := "https://pokeapi.co/api/v2/location-area/" + locationName + "/"
-
-	data, err := fetchLocation(url)
-	if err != nil {
-		return fmt.Errorf("explore fetch error: %v", err)
-	}	
-	
-	fmt.Printf("Exploring %s:\n", locationName)
-	for _, loc := range data.Results {
-	fmt.Println("-", loc.Name)
-	}
-
-	cfg.Next = data.Next
-	cfg.Previous = data.Previous
-
-	return nil
-}
 
 func init() {
 	command = map[string]cliCommand{
 		"exit": {
 			name:        "exit",
-			description: "Exit the Pokedex",
+		description: "Exit the Pokedex",
 			callback:    commandExit,
 		},
 		"help": {

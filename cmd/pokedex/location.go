@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -61,3 +62,36 @@ func fetchLocation(url string) (*LocationAreaRespose, error){
 	}
 	return &data, nil
 }
+
+
+func commandMap(cfg *Config, parsedText []string) error {
+	data, err := fetchLocation(cfg.Next)
+	if err != nil {
+		return fmt.Errorf("error fetchLocation")
+	}
+	for _, loc := range data.Results {
+		fmt.Println(loc.Name)
+	}
+	cfg.Next = data.Next
+	cfg.Previous = data.Previous
+	return nil
+}
+func commandMapBack(cfg *Config, parsedText []string) error {
+	if cfg.Previous == "" {
+		fmt.Println("you're on the first page")
+		return nil 
+	}
+	data, err := fetchLocation(cfg.Previous)
+	if err != nil {
+		fmt.Println("error fetchLocation")
+		return nil
+	}
+	for _, loc := range data.Results {
+		fmt.Println(loc.Name)
+	}
+	cfg.Next = data.Next
+	cfg.Previous = data.Previous
+	return  nil
+}
+
+
