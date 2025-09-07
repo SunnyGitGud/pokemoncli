@@ -9,17 +9,17 @@ import (
 
 
 type URLName struct {
-	Name string
-	URL string
+    Name string `json:"name"`
+    URL  string `json:"url"`
 }
 
-type PokemonEncounter struct{
-	Pokemon URLName
+type PokemonEncounter struct {
+    Pokemon URLName `json:"pokemon"`
 }
 
-type LocationAreaDetail struct{
-	Name string
-	PokemonList []PokemonEncounter
+type LocationAreaDetail struct {
+    Name          string             `json:"name"`
+    PokemonList   []PokemonEncounter `json:"pokemon_encounters"`
 } 
 
 func FetchLocationDetail(url string)  (*LocationAreaDetail, error) {
