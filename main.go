@@ -10,25 +10,25 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*Config, []string) error
+	callback    func(*Config, string) error
 }
 
 var command map[string]cliCommand // declare first
 
-func commandExit(cfg *Config, parsedText []string) error {
+func commandExit(cfg *Config, parsedText string) error {
 	fmt.Println("Closing your pokedex... Goodbye")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(cfg *Config, parsedText []string) error {
+func commandHelp(cfg *Config, parsedText string) error {
 	for name, cmd := range command {
 		fmt.Printf("%s: %s\n", name, cmd.description)
 	}
 	return nil
 }
 
-func commandMap(cfg *Config, parsedText []string) error {
+func commandMap(cfg *Config, parsedText string) error {
 	data, err := fetchLocation(cfg.Next)
 	if err != nil {
 		return fmt.Errorf("error fetchLocation")
@@ -40,7 +40,7 @@ func commandMap(cfg *Config, parsedText []string) error {
 	cfg.Previous = data.Previous
 	return nil
 }
-func commandMapBack(cfg *Config, parsedText []string) error {
+func commandMapBack(cfg *Config, parsedText string) error {
 	if cfg.Previous == "" {
 		fmt.Println("you're on the first page")
 		return nil 
@@ -58,12 +58,12 @@ func commandMapBack(cfg *Config, parsedText []string) error {
 	return  nil
 }
 
-func commandExplore(cfg *Config, parsedText []string) error {
+func commandExplore(cfg *Config, parsedText string) error {
 	if len(parsedText) < 2 {
 		return fmt.Errorf("use Explore + location name")
 	}
 
-	locationName := parsedText[1]
+	locationName := parsedText
 	url := "https://pokeapi.co/api/v2/location-area/" + locationName + "/"
 
 	data, err := fetchLocation(url)
@@ -71,9 +71,9 @@ func commandExplore(cfg *Config, parsedText []string) error {
 		return fmt.Errorf("explore fetch error: %v", err)
 	}
 
-	fmt.Printf("Exploring %s", locationName)
 	for _, loc := range data.Results {
-		fmt.Println("-", loc.Name)
+	fmt.Printf("Exploring %s", locationName)
+	fmt.Println("-", loc.Name)
 	}
 
 	cfg.Next = data.Next
@@ -134,7 +134,8 @@ func main() {
 			fmt.Println("unknown command: ", inputCmd)
 			continue
 		}
-		err := cmd.callback(cfg, parsedText) 
+		inputPara := parsedText[1]
+		err := cmd.callback(cfg, inputPara) 
 		if err != nil {
 			fmt.Println("Error:", err)
 		}
