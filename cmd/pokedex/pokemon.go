@@ -156,7 +156,7 @@ func commandCatch(cfg *Config, parsedText []string) error {
 }	
 
 
-func commandIpokedex (cfg *Config, parsedText []string) error {
+func commandPokedex (cfg *Config, parsedText []string) error {
 	if len(Mypokedex) == 0 {
 		fmt.Println("Your pokedex is Empty go catch some pokemon j")
 		return nil
@@ -166,5 +166,20 @@ func commandIpokedex (cfg *Config, parsedText []string) error {
 	for name := range Mypokedex{
 		fmt.Printf("- %s \n", name)
 	}
+	return nil
+}
+
+func commandIspect (cfg *Config, parsedText []string) error {
+	if len(parsedText) < 2 {
+		fmt.Println("Mention the name of pokemon you want to inspect")
+		return nil
+	}
+
+	pokemon := parsedText[1]
+	if data, exists := Mypokedex[pokemon]; !exists {
+		fmt.Printf("%s does not exist in your pokedex", pokemon)
+	} else {
+		fmt.Println(data)
+	} 
 	return nil
 }
