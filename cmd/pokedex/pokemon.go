@@ -120,7 +120,7 @@ func commandCatch(cfg *Config, parsedText []string) error {
 		return fmt.Errorf("Use Catch <pokemon name of this region>")
 	}
 
-	pokemonI := parsedText[2]
+	pokemonI := parsedText[1]
 	url := "https://pokeapi.co/api/v2/pokemon/" + pokemonI + "/" 
 
 	data, err := FetchPokemonDetail(url)
