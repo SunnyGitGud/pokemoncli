@@ -50,6 +50,8 @@ type Pokemon struct {
 	} `json:"sprites"`
 }
 
+var Mypokedex = make(map[string]*Pokemon)	
+
 func FetchLocationDetail(url string)  (*LocationAreaDetail, error) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -128,10 +130,10 @@ func commandCatch(cfg *Config, parsedText []string) error {
 		return fmt.Errorf("%s is not a valid pokemon", pokemonI)
 	}	
 
-	fmt.Printf("Throwing a Pokeball at %s", data.Name)
+	fmt.Printf("Throwing a Pokeball at %s...\n", data.Name)
 	
 
-	catchChance := 200 /float64(data.BaseExperience + 50)
+	catchChance := 200.0 /float64(data.BaseExperience + 50)
 	if catchChance > 0.9 {
 		catchChance = 0.9
 	}
@@ -140,10 +142,29 @@ func commandCatch(cfg *Config, parsedText []string) error {
 	}
 
 	if rand.Float64() < catchChance {
-		fmt.Printf("%s was caught!", data.Name)
+		if _, exists := Mypokedex[data.Name]; exists {
+			fmt.Printf("%s is already in your pokedex\n", data.Name)
+		} else {
+			Mypokedex[data.Name] = data
+			fmt.Printf("%s was caught! and added to your pokedex\n", data.Name)	
+		}
 	} else {
-		fmt.Printf("%s escaped", data.Name)
+		fmt.Printf("%s escaped\n", data.Name)
 	}
 
 	return nil
 }	
+
+
+func commandIpokedex (cfg *Config, parsedText []string) error {
+	if len(Mypokedex) == 0 {
+		fmt.Println("Your pokedex is Empty go catch some pokemon j")
+		return nil
+	}
+
+	fmt.Println("your Pokedex: ")
+	for name := range Mypokedex{
+		fmt.Print("- %s \n", name)
+	}
+	return nil
+}
