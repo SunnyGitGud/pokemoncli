@@ -169,7 +169,7 @@ func commandPokedex (cfg *Config, parsedText []string) error {
 	return nil
 }
 
-func commandIspect (cfg *Config, parsedText []string) error {
+func commandInspect (cfg *Config, parsedText []string) error {
 	if len(parsedText) < 2 {
 		fmt.Println("Mention the name of pokemon you want to inspect")
 		return nil
