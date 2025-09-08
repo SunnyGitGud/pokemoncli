@@ -32,37 +32,37 @@ func commandHelp(cfg *Config, parsedText []string) error {
 func init() {
 	command = map[string]cliCommand{
 		"exit": {
-			name:        "exit",
-		description: "Exit the Pokedex",
+			name:        "Exit",
+			description: "Exit the Pokedex",
 			callback:    commandExit,
 		},
 		"help": {
-			name:        "help",
+			name:        "Help",
 			description: "Shows commands and descriptions",
 			callback:    commandHelp,
 		},
 		"map": {
-			name:        "map",
+			name:        "Map",
 			description: "Displays next 20 locations",
 			callback:    commandMap,
 		},
 		"mapb": {
-            name:        "mapb",
+            name:        "Mapb",
             description: "Displays previous 20 locations",
             callback:    commandMapBack, // implement similar to commandMap
     },
 		"explore": {
-            name:        "explore",
+            name:        "Explore",
             description: "Explore locations",
             callback:    commandExplore, 
     },
 		"catch": {
-            name:        "catch",
+            name:        "Catch",
             description: "Try to catch a pokemon",
             callback:    commandCatch, 
     },
 		"pokedex": {
-            name:        "pokedex",
+            name:        "Pokedex",
             description: "Inspect your pokedex",
             callback:    commandPokedex, 
     },
@@ -87,7 +87,7 @@ func main() {
 	cfg := &Config{}
 	reader := bufio.NewReader(os.Stdin)
 	for {
-		fmt.Printf("Pokedex >")	
+		fmt.Printf("Pokedex >  \n")	
 		line, _ := reader.ReadString('\n')
 		parsedText := cleanInput(line)	
 		inputCmd := parsedText[0]

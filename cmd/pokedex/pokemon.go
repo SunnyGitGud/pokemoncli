@@ -196,8 +196,6 @@ func commandInspect (cfg *Config, parsedText []string) error {
 	for _, s := range data.Stats {
 		fmt.Printf(" - %s: %d\n", s.Stat.Name, s.BaseStat)
 	}
-
-	fmt.Printf("\nSprite: %s\n", data.Sprites.FrontDefault)
 }
 	return nil
 }
