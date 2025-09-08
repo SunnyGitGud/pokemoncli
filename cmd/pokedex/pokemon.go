@@ -164,7 +164,7 @@ func commandIpokedex (cfg *Config, parsedText []string) error {
 
 	fmt.Println("your Pokedex: ")
 	for name := range Mypokedex{
-		fmt.Print("- %s \n", name)
+		fmt.Printf("- %s \n", name)
 	}
 	return nil
 }
