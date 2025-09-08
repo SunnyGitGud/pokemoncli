@@ -6,6 +6,9 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
+	"strings"
+
+	"golang.org/x/text/cases"
 )
 
 
@@ -177,9 +180,24 @@ func commandInspect (cfg *Config, parsedText []string) error {
 
 	pokemon := parsedText[1]
 	if data, exists := Mypokedex[pokemon]; !exists {
-		fmt.Printf("%s does not exist in your pokedex", pokemon)
-	} else {
-		fmt.Println(data)
-	} 
+		fmt.Printf("%s does not exist in your pokedex \n", pokemon)
+	} else { 
+	fmt.Printf("\n--- %s ---\n", data.Name)
+	fmt.Printf("ID: %d\n", data.ID)
+	fmt.Printf("Height: %d\n", data.Height)
+	fmt.Printf("Weight: %d\n", data.Weight)
+
+	fmt.Println("\nTypes:")
+	for _, t := range data.Types {
+		fmt.Printf(" - %s\n", t.Type.Name)
+	}
+
+	fmt.Println("\nStats:")
+	for _, s := range data.Stats {
+		fmt.Printf(" - %s: %d\n", s.Stat.Name, s.BaseStat)
+	}
+
+	fmt.Printf("\nSprite: %s\n", data.Sprites.FrontDefault)
+}
 	return nil
 }
